@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "329549025705",
+    "project_id": "mykuaforshop-a7e0d",
+    "storage_bucket": "mykuaforshop-a7e0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329549025705:android:ea6fb97202f6a0940374b8",
+        "android_client_info": {
+          "package_name": "com.example.mykuaforshop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJWEZBwIRxeer0KTJO-xxwTcdcHlV7doQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
