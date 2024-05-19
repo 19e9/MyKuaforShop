@@ -61,7 +61,13 @@ class _SingUpState extends State<SingUp> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.w500),
                   ),
-                  TextField(
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Lütfen Ad ve Soyad giriniz';
+                      }
+                      return null;
+                    },
                     controller: namecontroller,
                     decoration: InputDecoration(
                         hintText: "Adınız",
@@ -77,7 +83,13 @@ class _SingUpState extends State<SingUp> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.w500),
                   ),
-                  TextField(
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Lütfen E-posta giriniz';
+                      }
+                      return null;
+                    },
                     controller: emailcontroller,
                     decoration: InputDecoration(
                         hintText: "E-posta adresinizi girin",
@@ -93,7 +105,13 @@ class _SingUpState extends State<SingUp> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.w500),
                   ),
-                  TextField(
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Lütfen güçlü bir şifre giriniz';
+                      }
+                      return null;
+                    },
                     controller: passwordcontroller,
                     decoration: InputDecoration(
                         hintText: "Güçlü bir parola seçin",
