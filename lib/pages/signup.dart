@@ -10,6 +10,10 @@ class SingUp extends StatefulWidget {
 }
 
 class _SingUpState extends State<SingUp> {
+  TextEditingController namecontroller = new TextEditingController();
+  TextEditingController emailcontroller = new TextEditingController();
+  TextEditingController passwordcontroller = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +60,7 @@ class _SingUpState extends State<SingUp> {
                         fontWeight: FontWeight.w500),
                   ),
                   TextField(
+                    controller: namecontroller,
                     decoration: InputDecoration(
                         hintText: "Adınız",
                         prefixIcon: Icon(Icons.person_outline)),
@@ -71,6 +76,7 @@ class _SingUpState extends State<SingUp> {
                         fontWeight: FontWeight.w500),
                   ),
                   TextField(
+                    controller: emailcontroller,
                     decoration: InputDecoration(
                         hintText: "E-posta adresinizi girin",
                         prefixIcon: Icon(Icons.mail_outline)),
@@ -86,6 +92,7 @@ class _SingUpState extends State<SingUp> {
                         fontWeight: FontWeight.w500),
                   ),
                   TextField(
+                    controller: passwordcontroller,
                     decoration: InputDecoration(
                         hintText: "Güçlü bir parola seçin",
                         prefixIcon: Icon(Icons.lock)),
