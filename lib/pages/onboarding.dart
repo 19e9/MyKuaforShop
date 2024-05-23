@@ -30,7 +30,7 @@ class _OnboardingState extends State<Onboarding> {
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                     decoration: BoxDecoration(
                         color: Color.fromARGB(255, 4, 82, 111),
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(15)),
                     child: Text(
                       "Siz En İyisini Hakettiğiniz İçin",
                       style: TextStyle(
