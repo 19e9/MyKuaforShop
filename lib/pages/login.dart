@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mykuaforshop/pages/home.dart';
 import 'package:mykuaforshop/pages/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_recaptcha_v2_compat/flutter_recaptcha_v2_compat.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -13,17 +13,29 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   String? mail, password;
-
   TextEditingController emailcontroller = new TextEditingController();
   TextEditingController passwordcontroller = new TextEditingController();
+  RecaptchaV2Controller recaptchaV2Controller = new RecaptchaV2Controller();
+  String? recaptchaToken;
 
   final _formkey = GlobalKey<FormState>();
 
   userLogin() async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: mail!, password: password!);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      if (recaptchaToken != null) {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: mail!, password: password!);
+        // ignore: use_build_context_synchronously
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "Lütfen reCAPTCHA doğrulamasını tamamlayın!",
+            style: TextStyle(fontSize: 18.0, color: Colors.black),
+          ),
+        ));
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -48,7 +60,10 @@ class _LogInState extends State<LogIn> {
         child: Stack(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 40.0, left: 10.0),
+              padding: EdgeInsets.only(
+                top: 50.0,
+                left: 30.0,
+              ),
               height: MediaQuery.of(context).size.height / 2,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
@@ -61,12 +76,13 @@ class _LogInState extends State<LogIn> {
                 "Merhaba\nGiriş yap!",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 30.0,
+                    fontSize: 32.0,
                     fontWeight: FontWeight.bold),
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 40.0, left: 30.0, right: 30.0),
+              padding: EdgeInsets.only(
+                  top: 40.0, left: 30.0, right: 30.0, bottom: 30.0),
               margin:
                   EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
               height: MediaQuery.of(context).size.height,
@@ -74,8 +90,8 @@ class _LogInState extends State<LogIn> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40.0),
-                      topRight: Radius.circular(40.0))),
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40))),
               child: Form(
                 key: _formkey,
                 child: Column(
@@ -85,23 +101,29 @@ class _LogInState extends State<LogIn> {
                       "E-posta",
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 25.0,
+                          fontSize: 23.0,
                           fontWeight: FontWeight.w500),
                     ),
                     TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Lütfen doğru bir e-posta adres girin';
+                        }
+                        return null;
+                      },
                       controller: emailcontroller,
                       decoration: InputDecoration(
                           hintText: "E-posta adresinizi girin",
                           prefixIcon: Icon(Icons.mail_outline)),
                     ),
                     SizedBox(
-                      height: 30.0,
+                      height: 40.0,
                     ),
                     Text(
                       "Şifre",
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 25.0,
+                          fontSize: 23.0,
                           fontWeight: FontWeight.w500),
                     ),
                     TextFormField(
@@ -113,12 +135,13 @@ class _LogInState extends State<LogIn> {
                       },
                       controller: passwordcontroller,
                       decoration: InputDecoration(
-                          hintText: "Şifrenizi girin",
-                          prefixIcon: Icon(Icons.lock)),
+                        hintText: "Şifrenizi girin",
+                        prefixIcon: Icon(Icons.lock_outline),
+                      ),
                       obscureText: true,
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: 30.0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -127,45 +150,53 @@ class _LogInState extends State<LogIn> {
                           "Şifremi unuttum?",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 20.0,
+                              fontSize: 18.0,
                               fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: 50.0,
+                      height: 60.0,
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            Color.fromARGB(255, 4, 82, 111),
-                            Color.fromARGB(255, 35, 104, 130),
-                            Color.fromARGB(255, 4, 82, 111)
-                          ]),
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Center(
-                        child: Text(
+                    GestureDetector(
+                      onTap: () {
+                        if (_formkey.currentState!.validate()) {
+                          setState(() {
+                            mail = emailcontroller.text;
+                            password = passwordcontroller.text;
+                          });
+                          userLogin();
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                              Color.fromARGB(255, 4, 82, 111),
+                              Color.fromARGB(255, 35, 104, 130),
+                              Color.fromARGB(255, 4, 82, 111)
+                            ]),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                            child: Text(
                           "Giriş Yap",
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 25.0,
+                              fontSize: 24.0,
                               fontWeight: FontWeight.bold),
-                        ),
+                        )),
                       ),
                     ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
+                    Spacer(),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
                           "Veya",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 20.0,
+                              fontSize: 17.0,
                               fontWeight: FontWeight.w500),
                         ),
                       ],
@@ -176,23 +207,22 @@ class _LogInState extends State<LogIn> {
                             MaterialPageRoute(builder: (context) => SingUp()));
                       },
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "ÜYE OL",
+                            "Üye Ol",
                             style: TextStyle(
                                 color: Colors.black54,
-                                fontSize: 20.0,
-                                decoration: TextDecoration.underline,
-                                fontWeight: FontWeight.w500),
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
