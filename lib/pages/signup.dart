@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mykuaforshop/pages/home.dart';
 import 'package:mykuaforshop/pages/login.dart';
+import 'package:mykuaforshop/services/db.dart';
+import 'package:mykuaforshop/services/shared_pref.dart';
+import 'package:random_string/random_string.dart';
+import 'package:flutter_recaptcha_v2_compat/flutter_recaptcha_v2_compat.dart';
 
 class SingUp extends StatefulWidget {
   const SingUp({super.key});
@@ -17,6 +20,9 @@ class _SignUpState extends State<SingUp> {
   TextEditingController namecontroller = new TextEditingController();
   TextEditingController emailcontroller = new TextEditingController();
   TextEditingController passwordcontroller = new TextEditingController();
+  final RecaptchaV2Controller recaptchaV2Controller = RecaptchaV2Controller();
+
+  bool _isRecaptchaVerified = false;
 
   final _formkey = GlobalKey<FormState>();
 
@@ -25,19 +31,21 @@ class _SignUpState extends State<SingUp> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: mail!, password: password!);
-        //String id = randomAlphaNumeric(10);
-        //await SharedpreferenceHelper().saveUserName(namecontroller.text);
-        //await SharedpreferenceHelper().saveUserEmail(emailcontroller.text);
-        //await SharedpreferenceHelper().saveUserImage("https://firebasestorage.googleapis.com/v0/b/barberapp-ebcc1.appspot.com/o/icon1.png?alt=media&token=0fad24a5-a01b-4d67-b4a0-676fbc75b34a");
-        //await SharedpreferenceHelper().saveUserId(id);
-        // Map<String, dynamic> userInfoMap = {
-        //   "Name": namecontroller.text,
-        //   "Email": emailcontroller.text,
-        //  "Id": id,
-        // "Image":
-        //     "https://firebasestorage.googleapis.com/v0/b/barberapp-ebcc1.appspot.com/o/icon1.png?alt=media&token=0fad24a5-a01b-4d67-b4a0-676fbc75b34a"
-        //};
-        //await DatabaseMethods().addUserDetails(userInfoMap, id);
+
+        String id = randomAlphaNumeric(10);
+        await SharedpreferenceHelper().saveUserName(namecontroller.text);
+        await SharedpreferenceHelper().saveUserEmail(emailcontroller.text);
+        await SharedpreferenceHelper().saveUserImage(
+            "https://firebasestorage.googleapis.com/v0/b/barberapp-ebcc1.appspot.com/o/icon1.png?alt=media&token=0fad24a5-a01b-4d67-b4a0-676fbc75b34a");
+        await SharedpreferenceHelper().saveUserId(id);
+        Map<String, dynamic> userInfoMap = {
+          "AdveSoyad": namecontroller.text,
+          "Eposta": emailcontroller.text,
+          "Id": id,
+          "Resim":
+              "https://firebasestorage.googleapis.com/v0/b/barberapp-ebcc1.appspot.com/o/icon1.png?alt=media&token=0fad24a5-a01b-4d67-b4a0-676fbc75b34a"
+        };
+        await DatabaseMethods().addUserDetails(userInfoMap, id);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             "Üyeliğiniz başarıyla oluşturuldu",
