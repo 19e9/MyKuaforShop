@@ -38,6 +38,9 @@ dependencies:
   firebase_core: ^2.31.0
   cloud_firestore: ^4.17.3
   firebase_auth: ^4.19.5
+  flutter_recaptcha_v2_compat: ^1.0.3+3
+  random_string: ^2.3.1
+  shared_preferences: ^2.2.3
 
 
 dev_dependencies:
