@@ -81,6 +81,12 @@ class _LogInState extends State<LogIn> {
                           fontWeight: FontWeight.w500),
                     ),
                     TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Lütfen güçlü bir şifre seçin';
+                        }
+                        return null;
+                      },
                       controller: passwordcontroller,
                       decoration: InputDecoration(
                           hintText: "Şifrenizi girin",
