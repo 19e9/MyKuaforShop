@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mykuaforshop/pages/home.dart';
 import 'package:mykuaforshop/pages/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -16,6 +18,28 @@ class _LogInState extends State<LogIn> {
   TextEditingController passwordcontroller = new TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
+
+  userLogin() async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: mail!, password: password!);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+          "Bu Eposta adresiyla kullancı bulunmadı!",
+          style: TextStyle(fontSize: 18.0, color: Colors.black),
+        )));
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+          "Şifreyi yanlış girdiniz!",
+          style: TextStyle(fontSize: 18.0, color: Colors.black),
+        )));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
