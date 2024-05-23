@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mykuaforshop/pages/booking.dart';
+import 'package:mykuaforshop/services/shared_pref.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,6 +12,25 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String? name, image;
+
+  getthedatafromsharedpref() async {
+    name = await SharedpreferenceHelper().getUserName();
+    image = await SharedpreferenceHelper().getUserImage();
+    setState(() {});
+  }
+
+  getontheload() async {
+    await getthedatafromsharedpref();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getontheload();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
