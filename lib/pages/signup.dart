@@ -8,10 +8,10 @@ class SingUp extends StatefulWidget {
   const SingUp({super.key});
 
   @override
-  State<SingUp> createState() => _SingUpState();
+  State<SingUp> createState() => _SignUpState();
 }
 
-class _SingUpState extends State<SingUp> {
+class _SignUpState extends State<SingUp> {
   String? name, mail, password;
 
   TextEditingController namecontroller = new TextEditingController();
@@ -25,24 +25,41 @@ class _SingUpState extends State<SingUp> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: mail!, password: password!);
+        //String id = randomAlphaNumeric(10);
+        //await SharedpreferenceHelper().saveUserName(namecontroller.text);
+        //await SharedpreferenceHelper().saveUserEmail(emailcontroller.text);
+        //await SharedpreferenceHelper().saveUserImage("https://firebasestorage.googleapis.com/v0/b/barberapp-ebcc1.appspot.com/o/icon1.png?alt=media&token=0fad24a5-a01b-4d67-b4a0-676fbc75b34a");
+        //await SharedpreferenceHelper().saveUserId(id);
+        // Map<String, dynamic> userInfoMap = {
+        //   "Name": namecontroller.text,
+        //   "Email": emailcontroller.text,
+        //  "Id": id,
+        // "Image":
+        //     "https://firebasestorage.googleapis.com/v0/b/barberapp-ebcc1.appspot.com/o/icon1.png?alt=media&token=0fad24a5-a01b-4d67-b4a0-676fbc75b34a"
+        //};
+        //await DatabaseMethods().addUserDetails(userInfoMap, id);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-          "Üyeliğiniz başarıyla oluşturuldu",
-          style: TextStyle(fontSize: 20.0),
-        )));
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
+          content: Text(
+            "Üyeliğiniz başarıyla oluşturuldu",
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ));
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'Girdiniz şifre çok zayif') {
+        if (e.code == 'zayıf şifre') {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-            "Girdiğiniz Şifre çok zayıf",
+            "Girdiniz şifre çok zayıf",
             style: TextStyle(fontSize: 20.0),
           )));
-        } else if (e.code == "E-posta zaten kullanımda") {
+        } else if (e.code == "e-posta zaten kullanımda") {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-            "Girdiğiniz e-posta adresiyle zaten bir hesap mevcutur",
+            "Zaten üyesiniz, lütfen giriş yapın.",
             style: TextStyle(fontSize: 20.0),
           )));
         }
@@ -57,7 +74,10 @@ class _SingUpState extends State<SingUp> {
         child: Stack(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 40.0, left: 10.0),
+              padding: EdgeInsets.only(
+                top: 50.0,
+                left: 30.0,
+              ),
               height: MediaQuery.of(context).size.height / 2,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
@@ -67,15 +87,16 @@ class _SingUpState extends State<SingUp> {
                 Color.fromARGB(255, 4, 82, 111)
               ])),
               child: Text(
-                "Hesabınızı oluşturup bize katılabilirsiniz!",
+                "Üyeliğinizi başlatın!",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w300),
+                    fontSize: 32.0,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 40.0, left: 30.0, right: 30.0),
+              padding: EdgeInsets.only(
+                  top: 40.0, left: 30.0, right: 30.0, bottom: 30.0),
               margin:
                   EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
               height: MediaQuery.of(context).size.height,
@@ -83,18 +104,18 @@ class _SingUpState extends State<SingUp> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40.0),
-                      topRight: Radius.circular(40.0))),
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40))),
               child: Form(
                 key: _formkey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Ad",
+                      "Ad-Soyad",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25.0,
+                          color: Color.fromARGB(255, 4, 82, 111),
+                          fontSize: 23.0,
                           fontWeight: FontWeight.w500),
                     ),
                     TextFormField(
@@ -106,23 +127,23 @@ class _SingUpState extends State<SingUp> {
                       },
                       controller: namecontroller,
                       decoration: InputDecoration(
-                          hintText: "Adınız",
+                          hintText: "Adınız girin",
                           prefixIcon: Icon(Icons.person_outline)),
                     ),
                     SizedBox(
-                      height: 30.0,
+                      height: 40.0,
                     ),
                     Text(
                       "E-posta",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25.0,
+                          color: Color.fromARGB(255, 4, 82, 111),
+                          fontSize: 23.0,
                           fontWeight: FontWeight.w500),
                     ),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Lütfen E-posta giriniz';
+                          return 'Lütfen E-posta adresinizi girin';
                         }
                         return null;
                       },
@@ -132,67 +153,74 @@ class _SingUpState extends State<SingUp> {
                           prefixIcon: Icon(Icons.mail_outline)),
                     ),
                     SizedBox(
-                      height: 30.0,
+                      height: 40.0,
                     ),
                     Text(
                       "Şifre",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25.0,
+                          color: Color.fromARGB(255, 4, 82, 111),
+                          fontSize: 23.0,
                           fontWeight: FontWeight.w500),
                     ),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Lütfen güçlü bir şifre giriniz';
+                          return 'Lütfen güçlü bir şifre seçin';
                         }
                         return null;
                       },
                       controller: passwordcontroller,
                       decoration: InputDecoration(
-                          hintText: "Güçlü bir parola seçin",
-                          prefixIcon: Icon(Icons.lock)),
+                        hintText: "Güçlü bir şifre seçin",
+                        prefixIcon: Icon(Icons.lock_outline),
+                      ),
                       obscureText: true,
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: 60.0,
                     ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            Color.fromARGB(255, 4, 82, 111),
-                            Color.fromARGB(255, 35, 104, 130),
-                            Color.fromARGB(255, 4, 82, 111)
-                          ]),
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Center(
-                        child: Text(
-                          "Kayıt Ol",
+                    GestureDetector(
+                      onTap: () {
+                        if (_formkey.currentState!.validate()) {
+                          setState(() {
+                            mail = emailcontroller.text;
+                            name = namecontroller.text;
+                            password = passwordcontroller.text;
+                          });
+                        }
+                        registration();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                              Color.fromARGB(255, 4, 82, 111),
+                              Color.fromARGB(255, 35, 104, 130),
+                              Color.fromARGB(255, 4, 82, 111)
+                            ]),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                            child: Text(
+                          "Üye ol",
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 25.0,
+                              fontSize: 24.0,
                               fontWeight: FontWeight.bold),
-                        ),
+                        )),
                       ),
                     ),
-                    SizedBox(
-                      height: 30.0,
-                    ),
+                    Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "Kayıt işlemi tamamlandıysa\ngiriş ekranına dönebilirsiniz",
+                          "Zaten üyeliyim var?",
                           style: TextStyle(
-                              color: Color(0xFF311937),
+                              color: Colors.black54,
                               fontSize: 17.0,
-                              fontWeight: FontWeight.w300),
-                        )
+                              fontWeight: FontWeight.w500),
+                        ),
                       ],
                     ),
                     GestureDetector(
@@ -204,19 +232,19 @@ class _SingUpState extends State<SingUp> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "Giriş Yap>>",
+                            "Giriş yap",
                             style: TextStyle(
-                                color: Color(0xFF311937),
-                                fontSize: 17.0,
+                                color: Color.fromARGB(255, 4, 82, 111),
+                                fontSize: 22.0,
                                 fontWeight: FontWeight.bold),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
