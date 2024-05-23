@@ -50,13 +50,13 @@ class _SignUpState extends State<SingUp> {
           MaterialPageRoute(builder: (context) => Home()),
         );
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'zayıf şifre') {
+        if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
             "Girdiniz şifre çok zayıf",
             style: TextStyle(fontSize: 20.0),
           )));
-        } else if (e.code == "e-posta zaten kullanımda") {
+        } else if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
             "Zaten üyesiniz, lütfen giriş yapın.",
