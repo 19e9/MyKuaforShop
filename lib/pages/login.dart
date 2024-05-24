@@ -22,20 +22,10 @@ class _LogInState extends State<LogIn> {
 
   userLogin() async {
     try {
-      if (recaptchaToken != null) {
-        await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: mail!, password: password!);
-        // ignore: use_build_context_synchronously
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            "Lütfen reCAPTCHA doğrulamasını tamamlayın!",
-            style: TextStyle(fontSize: 18.0, color: Colors.black),
-          ),
-        ));
-      }
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: mail!, password: password!);
+      // ignore: use_build_context_synchronously
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
