@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
                           fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      "Khalid Tariq",
+                      name ?? "",
                       style: TextStyle(
                           color: Color.fromARGB(255, 0, 0, 0),
                           fontSize: 24.0,
@@ -64,8 +64,8 @@ class _HomeState extends State<Home> {
                 ),
                 ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      "images/boy.jpg",
+                    child: Image.network(
+                      image ?? "",
                       height: 60,
                       width: 60,
                       fit: BoxFit.cover,
