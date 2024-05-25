@@ -24,4 +24,22 @@ class DatabaseMethods {
         .doc(id)
         .delete();
   }
+
+  Future<bool> checkUserBooking(
+      String email, String service, String date) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('Booking')
+          .where('E-posta', isEqualTo: email)
+          .where('Hizmet', isEqualTo: service)
+          .where('Rendavu_Tarihi', isEqualTo: date)
+          .get();
+
+      return snapshot.docs.isNotEmpty;
+    } catch (e) {
+      print('Error checking user booking: $e');
+      return false;
+    }
+  }
 }
