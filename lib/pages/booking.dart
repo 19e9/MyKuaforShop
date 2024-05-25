@@ -105,7 +105,7 @@ class _BookingState extends State<Booking> {
         "Randevu_Tarihi":
             "${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}"
                 .toString(),
-        "Rendavu_Saati": _selectedTime.format(context),
+        "Randevu_Saati": _selectedTime.format(context),
         "Ad_Soyad": name,
         "Profil_Resimi": image,
         "E_posta": email,
