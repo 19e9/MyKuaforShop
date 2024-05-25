@@ -31,9 +31,9 @@ class DatabaseMethods {
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
           .collection('Booking')
-          .where('E-posta', isEqualTo: email)
-          .where('Hizmet', isEqualTo: service)
-          .where('Rendavu_Tarihi', isEqualTo: date)
+          .where('E_posta', isEqualTo: email)
+          .where('Servis', isEqualTo: service)
+          .where('Randevu_Tarihi', isEqualTo: date)
           .get();
 
       return snapshot.docs.isNotEmpty;
