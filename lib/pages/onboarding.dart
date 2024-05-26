@@ -23,7 +23,7 @@ class _OnboardingState extends State<Onboarding> {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LogIn()));
+                        MaterialPageRoute(builder: (context) => LogIn()));
                   },
                   child: Container(
                     padding:
@@ -32,7 +32,7 @@ class _OnboardingState extends State<Onboarding> {
                         color: Color.fromARGB(255, 4, 82, 111),
                         borderRadius: BorderRadius.circular(15)),
                     child: Text(
-                      "Siz En İyisini Hakettiğiniz İçin",
+                      "Başlat",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20.0,
