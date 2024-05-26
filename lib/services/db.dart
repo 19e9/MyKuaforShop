@@ -42,4 +42,8 @@ class DatabaseMethods {
       return false;
     }
   }
+
+  Future<Stream<QuerySnapshot>> getBooking() async {
+    return await FirebaseFirestore.instance.collection("Booking").snapshots();
+  }
 }
