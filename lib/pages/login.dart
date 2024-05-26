@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mykuaforshop/pages/forgot_password.dart';
 import 'package:mykuaforshop/pages/home.dart';
 import 'package:mykuaforshop/pages/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -133,17 +134,23 @@ class _LogInState extends State<LogIn> {
                     SizedBox(
                       height: 30.0,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Şifremi unuttum?",
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
+                    GestureDetector(
+                      onTap: (){
+                         Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ForgotPassword()));
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Şifremi unuttum?",
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 60.0,
