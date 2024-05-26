@@ -1,35 +1,37 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mykuaforshop/pages/login.dart';
 
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
+  const ForgotPassword({Key? key}) : super(key: key);
 
   @override
   State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  String? email;
-  TextEditingController mailcontroller = new TextEditingController();
-  final _formkey = GlobalKey<FormState>();
+  TextEditingController mailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  resetPassword() async {
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email!);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          "E-posta adresine şifre yenileme linkiniz gönderildi !",
-          style: TextStyle(fontSize: 20.0),
-        ),
-      ));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found") {
+  void resetPassword() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await FirebaseAuth.instance
+            .sendPasswordResetEmail(email: mailController.text.trim());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-          "Bu kullancı bulunmadı !",
-          style: TextStyle(fontSize: 20.0),
-        )));
+          content: Text(
+            "E-posta adresinize şifre yenileme linki gönderildi!",
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ));
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+            "Bu e-posta ile kayıtlı kullanıcı bulunamadı!",
+            style: TextStyle(fontSize: 20.0),
+          )));
+        }
       }
     }
   }
@@ -41,10 +43,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         child: Stack(
           children: [
             Container(
-              padding: EdgeInsets.only(
-                top: 50.0,
-                left: 30.0,
-              ),
+              padding: EdgeInsets.only(top: 50.0, left: 30.0),
               height: MediaQuery.of(context).size.height / 2,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
@@ -53,13 +52,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 Color.fromARGB(255, 65, 130, 154),
                 Color.fromARGB(255, 4, 82, 111)
               ])),
-              child: Text(
-                "Şifre Yenileme",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  "Şifre Yenileme",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32.0,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             Container(
@@ -75,7 +77,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40))),
               child: Form(
-                key: _formkey,
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -87,6 +89,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           fontWeight: FontWeight.w500),
                     ),
                     TextFormField(
+                      controller: mailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'E-posta adresi girin';
@@ -97,30 +100,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           hintText: "E-posta adresinizi girin",
                           prefixIcon: Icon(Icons.mail_outline)),
                     ),
-                    SizedBox(
-                      height: 40.0,
-                    ),
+                    SizedBox(height: 40.0),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgotPassword()));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        if (_formkey.currentState!.validate()) {
-                          setState(() {
-                            email = mailcontroller.text;
-                          });
+                        if (_formKey.currentState!.validate()) {
                           resetPassword();
                         }
                       },
@@ -135,13 +118,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             ]),
                             borderRadius: BorderRadius.circular(20)),
                         child: Center(
-                            child: Text(
-                          "Şifreimi Yenile",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold),
-                        )),
+                          child: Text(
+                            "Şifreimi Yenile",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
                     ),
                     Spacer(),
