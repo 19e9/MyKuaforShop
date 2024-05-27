@@ -15,10 +15,11 @@ class SingUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SingUp> {
-  String? name, mail, password;
+  String? name, mail, phone, password;
 
   TextEditingController namecontroller = new TextEditingController();
   TextEditingController emailcontroller = new TextEditingController();
+  TextEditingController phonecontroller = new TextEditingController();
   TextEditingController passwordcontroller = new TextEditingController();
   final RecaptchaV2Controller recaptchaV2Controller = RecaptchaV2Controller();
 
@@ -35,12 +36,14 @@ class _SignUpState extends State<SingUp> {
         String id = randomAlphaNumeric(10);
         await SharedpreferenceHelper().saveUserName(namecontroller.text);
         await SharedpreferenceHelper().saveUserEmail(emailcontroller.text);
+        await SharedpreferenceHelper().saveUserPhone(phonecontroller.text);
         await SharedpreferenceHelper().saveUserImage(
             "https://firebasestorage.googleapis.com/v0/b/barberapp-ebcc1.appspot.com/o/icon1.png?alt=media&token=0fad24a5-a01b-4d67-b4a0-676fbc75b34a");
         await SharedpreferenceHelper().saveUserId(id);
         Map<String, dynamic> userInfoMap = {
           "AdveSoyad": namecontroller.text,
           "Eposta": emailcontroller.text,
+          "Phone": phonecontroller.text,
           "Id": id,
           "Resim":
               "https://firebasestorage.googleapis.com/v0/b/barberapp-ebcc1.appspot.com/o/icon1.png?alt=media&token=0fad24a5-a01b-4d67-b4a0-676fbc75b34a"
@@ -158,6 +161,28 @@ class _SignUpState extends State<SingUp> {
                         decoration: InputDecoration(
                             hintText: "E-posta adresinizi girin",
                             prefixIcon: Icon(Icons.mail_outline)),
+                      ),
+                      SizedBox(
+                        height: 40.0,
+                      ),
+                       Text(
+                        "Phone",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 4, 82, 111),
+                            fontSize: 23.0,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Lütfen Telefon no girin';
+                          }
+                          return null;
+                        },
+                        controller: phonecontroller,
+                        decoration: InputDecoration(
+                            hintText: "Telefon no girin",
+                            prefixIcon: Icon(Icons.phone_android)),
                       ),
                       SizedBox(
                         height: 40.0,

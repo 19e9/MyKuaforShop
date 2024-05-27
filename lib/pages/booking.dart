@@ -13,12 +13,13 @@ class Booking extends StatefulWidget {
 }
 
 class _BookingState extends State<Booking> {
-  String? name, image, email;
+  String? name, image, email, phone;
 
   getthedatafromsharedpref() async {
     name = await SharedpreferenceHelper().getUserName();
     image = await SharedpreferenceHelper().getUserImage();
     email = await SharedpreferenceHelper().getUserEmail();
+    phone = await SharedpreferenceHelper().getUserPhone();
     setState(() {});
   }
 
@@ -88,7 +89,7 @@ class _BookingState extends State<Booking> {
     bool alreadyBooked = await DatabaseMethods().checkUserBooking(
       email!,
       widget.service,
-      "${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}",
+      "${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}", phone!
     );
 
     if (alreadyBooked) {
@@ -108,6 +109,7 @@ class _BookingState extends State<Booking> {
         "Randevu_Saati": _selectedTime.format(context),
         "Ad_Soyad": name,
         "Profil_Resimi": image,
+        "Phone": phone,
         "E_posta": email,
       };
       await DatabaseMethods().addUserBooking(userBookingmap).then((value) {

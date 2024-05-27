@@ -26,12 +26,13 @@ class DatabaseMethods {
   }
 
   Future<bool> checkUserBooking(
-      String email, String service, String date) async {
+      String email, String phone, String service, String date) async {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
           .collection('Booking')
           .where('E_posta', isEqualTo: email)
+          .where('Phone', isEqualTo: phone)
           .where('Servis', isEqualTo: service)
           .where('Randevu_Tarihi', isEqualTo: date)
           .get();
