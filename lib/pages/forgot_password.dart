@@ -14,7 +14,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
 
   void resetPassword() async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) { 
       try {
         await FirebaseAuth.instance
             .sendPasswordResetEmail(email: mailController.text.trim());
